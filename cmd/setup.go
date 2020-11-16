@@ -12,11 +12,11 @@ import (
 // SetupHandler _
 type SetupHandler interface {
 	// setup前 安装依赖
-	BeforeSetup() error
+	BeginSetup() error
 	// setup
 	DoSetup() error
 	// setup后 启动, 环境变量
-	AfterSetup() error
+	EndSetup() error
 }
 
 // SetupHandlers 接口组
@@ -46,15 +46,18 @@ func (c *Core) Fire() {
 	for _, h := range c.Hs {
 		go func(h SetupHandler) {
 			defer wg.Done()
-			err := h.BeforeSetup()
+
+			err := h.BeginSetup()
 			if err != nil {
 				log.Panic(err)
 			}
+
 			err = h.DoSetup()
 			if err != nil {
 				log.Panic(err)
 			}
-			err = h.AfterSetup()
+
+			err = h.EndSetup()
 			if err != nil {
 				log.Panic(err)
 			}

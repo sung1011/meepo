@@ -17,7 +17,7 @@ type DownLoadReader struct {
 func (r *DownLoadReader) Read(p []byte) (n int, err error) {
 	n, err = r.Reader.Read(p)
 	r.cur += int64(n)
-	fmt.Printf("\r [%s] %v/%v 进度: %.2f%%", r.name, r.cur, r.total, float64(r.cur*10000/r.total)/100)
+	fmt.Printf("\r[%s] %v/%v 进度: %.2f%%", r.name, r.cur, r.total, float64(r.cur*10000/r.total)/100)
 	return
 }
 

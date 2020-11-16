@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"sync"
 
 	"github.com/spf13/cobra"
@@ -11,11 +12,11 @@ import (
 // SetupHandler _
 type SetupHandler interface {
 	// setup前 安装依赖
-	BeforeSetup()
+	BeforeSetup() error
 	// setup
-	DoSetup()
+	DoSetup() error
 	// setup后 启动, 环境变量
-	AfterSetup()
+	AfterSetup() error
 }
 
 // SetupHandlers 接口组
@@ -45,9 +46,18 @@ func (c *Core) Fire() {
 	for _, h := range c.Hs {
 		go func(h SetupHandler) {
 			defer wg.Done()
-			h.BeforeSetup()
-			h.DoSetup()
-			h.AfterSetup()
+			err := h.BeforeSetup()
+			if err != nil {
+				log.Panic(err)
+			}
+			err = h.DoSetup()
+			if err != nil {
+				log.Panic(err)
+			}
+			err = h.AfterSetup()
+			if err != nil {
+				log.Panic(err)
+			}
 		}(h)
 	}
 }

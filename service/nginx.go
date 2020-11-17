@@ -46,6 +46,7 @@ func (ngx *Nginx) BeginSetup() (err error) {
 func (ngx *Nginx) DoSetup() (err error) {
 	// TODO 解压 编译
 	err = util.UnGzip(ngx.DownLoadPath, ngx.OPT)
+
 	return
 }
 

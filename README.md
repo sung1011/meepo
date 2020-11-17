@@ -24,6 +24,6 @@
 
 ## usage
 
-`meepo`
+`meepo setup`
 
 ## config

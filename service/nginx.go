@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/sung1011/meepo/util"
@@ -8,25 +9,30 @@ import (
 
 // Nginx _
 type Nginx struct {
+	Ver             string
 	DownLoadURL     string
 	DownLoadPath    string
 	DownLoadingPath string
 	OPT             string
+	Configure       []string
 }
 
 // NewNginx _
 func NewNginx() *Nginx {
+	ver := "1.18.0"
 	return &Nginx{
-		DownLoadURL:     "http://nginx.org/download/nginx-1.18.0.tar.gz",
-		DownLoadingPath: "/tmp/nginx.tar.gz.meepo",
-		DownLoadPath:    "/tmp/nginx.tar.gz",
+		Ver:             ver,
+		DownLoadURL:     fmt.Sprintf("http://nginx.org/download/nginx-%s.tar.gz", ver),
+		DownLoadingPath: fmt.Sprintf("/tmp/nginx-%s.tar.gz.meepo", ver),
+		DownLoadPath:    fmt.Sprintf("/tmp/nginx-%s.tar.gz", ver),
 		OPT:             "/opt/",
+		Configure:       []string{"--prefix=/opt/ngx", "--http-log-path=/opt/access.log"},
 	}
 }
 
 // BeginSetup _
 func (ngx *Nginx) BeginSetup() (err error) {
-	// 文件已经下载 直接返回
+	// 文件已经下载 则直接返回
 	_, statErr := os.Stat(ngx.DownLoadPath)
 	if statErr == nil || os.IsExist(statErr) {
 		return
@@ -44,9 +50,17 @@ func (ngx *Nginx) BeginSetup() (err error) {
 
 // DoSetup _
 func (ngx *Nginx) DoSetup() (err error) {
-	// TODO 解压 编译
 	err = util.UnGzip(ngx.DownLoadPath, ngx.OPT)
-
+	if err != nil {
+		return
+	}
+	err = os.Chdir(ngx.OPT + "nginx-" + ngx.Ver)
+	if err != nil {
+		return
+	}
+	util.RunCmd("./configure", ngx.Configure...)
+	util.RunCmd("make")
+	util.RunCmd("make", "install")
 	return
 }
 

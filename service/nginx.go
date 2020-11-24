@@ -9,24 +9,24 @@ import (
 
 // Nginx _
 type Nginx struct {
-	Ver             string
-	DownLoadURL     string
-	DownLoadPath    string
-	DownLoadingPath string
-	OPT             string
-	Configure       []string
+	Ver              string
+	DownLoadURL      string
+	DownLoadPath     string
+	DownLoadPathTemp string
+	OPT              string
+	Configure        []string
 }
 
 // NewNginx _
 func NewNginx() *Nginx {
 	ver := "1.18.0"
 	return &Nginx{
-		Ver:             ver,
-		DownLoadURL:     fmt.Sprintf("http://nginx.org/download/nginx-%s.tar.gz", ver),
-		DownLoadingPath: fmt.Sprintf("/tmp/nginx-%s.tar.gz.meepo", ver),
-		DownLoadPath:    fmt.Sprintf("/tmp/nginx-%s.tar.gz", ver),
-		OPT:             "/opt/",
-		Configure:       []string{"--prefix=/opt/ngx", "--http-log-path=/opt/access.log"},
+		Ver:              ver,
+		DownLoadURL:      fmt.Sprintf("http://nginx.org/download/nginx-%s.tar.gz", ver),
+		DownLoadPath:     fmt.Sprintf("/tmp/nginx-%s.tar.gz", ver),
+		DownLoadPathTemp: fmt.Sprintf("/tmp/nginx-%s.tar.gz.meepo", ver),
+		OPT:              "/opt/",
+		Configure:        []string{"--prefix=/opt/ngx", "--http-log-path=/opt/access.log"},
 	}
 }
 
@@ -37,11 +37,11 @@ func (ngx *Nginx) BeginSetup() (err error) {
 	if statErr == nil || os.IsExist(statErr) {
 		return
 	}
-	err = util.DownLoad(ngx.DownLoadURL, ngx.DownLoadingPath)
+	err = util.DownLoad(ngx.DownLoadURL, ngx.DownLoadPathTemp)
 	if err != nil {
 		return
 	}
-	err = os.Rename(ngx.DownLoadingPath, ngx.DownLoadPath)
+	err = os.Rename(ngx.DownLoadPathTemp, ngx.DownLoadPath)
 	if err != nil {
 		return
 	}

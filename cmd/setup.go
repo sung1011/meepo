@@ -45,6 +45,7 @@ func (c *Core) Fire() {
 	wg.Add(len(c.Hs))
 	for _, h := range c.Hs {
 		go func(h SetupHandler) {
+
 			defer wg.Done()
 
 			err := h.BeginSetup()

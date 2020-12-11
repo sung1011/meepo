@@ -24,6 +24,14 @@
 
 ## usage
 
+安装meepo
+
+`sh -c "$(curl -fsSL https://raw.githubusercontent.com/sung1011/meepo/main/init.sh)"`
+
+meepo安装其他组件
+
 `meepo setup`
 
 ## config
+
+TODO

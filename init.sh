@@ -15,18 +15,18 @@ GO_VER="1.15.6"
 # ==================== func
 
 function isCmdExist() {
-	local cmd="$1"
-  	if [ -z "$cmd" ]; then
-		echo "Usage isCmdExist yourCmd"
-		return 1
-	fi
+    local cmd="$1"
+    if [ -z "$cmd" ]; then
+        echo "Usage isCmdExist yourCmd"
+        return 1
+    fi
 
     if ! which "$cmd" >/dev/null 2>&1;
     then
-		return 0
-	fi
+        return 0
+    fi
 
-	return 2
+    return 2
 }
 
 # ==================== install

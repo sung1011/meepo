@@ -47,9 +47,8 @@ if ! isCmdExist go; then
     ln -s "$CRACK_PATH"go/bin/go "$CRACK_BIN_PATH"
 fi
 
-# goenv  
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+# export GOPATH=$HOME/go
+# export PATH=$PATH:$GOPATH/bin
 
 # -------- git
 

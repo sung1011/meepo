@@ -11,10 +11,26 @@ CRACK_BIN_PATH="/usr/local/bin/"
 mkdir -p "$CRACK_PATH"
 mkdir -p "$CRACK_PKG_PATH"
 
+# lib
+function isCmdExist() {
+	local cmd="$1"
+  	if [ -z "$cmd" ]; then
+		echo "Usage isCmdExist yourCmd"
+		return 1
+	fi
+
+    if ! which "$cmd" >/dev/null 2>&1;
+    then
+		return 0
+	fi
+
+	return 2
+}
+
 # -------- go
 
-# go version
-if [ ! -x go ]; then
+if ! isCmdExist go; then
+    # go version
     GO_VER="1.15.6"
     # download golang
     curl -sL https://golang.org/dl/go"$GO_VER".linux-amd64.tar.gz > /tmp/go"$GO_VER".tar.gz
@@ -26,7 +42,9 @@ fi
 # -------- git
 
 # install
-yum install -y git
+if ! isCmdExist git; then
+    yum install -y git
+fi
 
 # -------- meepo
 go get -u -v github.com/sung1011/meepo

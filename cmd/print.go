@@ -15,8 +15,10 @@
 package cmd
 
 import (
+	"time"
+
+	"github.com/cheggaaa/pb/v3"
 	"github.com/spf13/cobra"
-	"github.com/sung1011/meepo/util"
 )
 
 // printCmd represents the print command
@@ -30,7 +32,24 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		util.Print()
+		count := 100000
+		// create and start new bar
+		bar := pb.StartNew(count)
+
+		// start bar from 'default' template
+		// bar := pb.Default.Start(count)
+
+		// start bar from 'simple' template
+		// bar := pb.Simple.Start(count)
+
+		// start bar from 'full' template
+		// bar := pb.Full.Start(count)
+
+		for i := 0; i < count; i++ {
+			bar.Increment()
+			time.Sleep(time.Millisecond)
+		}
+		bar.Finish()
 	},
 }
 

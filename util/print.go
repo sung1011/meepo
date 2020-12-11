@@ -5,17 +5,19 @@ import (
 	"strings"
 )
 
-func Print() {
-	os := "111\n222\n333\n444\n555\n666\n777\n888\n999\n"
-	move(os, 3, "la")
+func PrintUpdLine(os string, ln int, s string) {
+	move(os, ln, s)
 }
 
-func move(os string, line int, s string) {
+func move(os string, ln int, s string) {
 	fmt.Print(os)
 	lineTotal := countLF(os) + 1
-	line = lineTotal - line
-	fmt.Printf("\033[%dA\r\033[K%s", line, s)
-	fmt.Printf("\033[%dB", line)
+	revLn := lineTotal - ln
+	// 光标上移 revLn && 清除从光标到行尾 && 重新输入s
+	rs := fmt.Sprintf("\033[%dA\r\033[K%s", revLn, s)
+	// 光标下移 回归到底部
+	rs += fmt.Sprintf("\033[%dB", revLn)
+	fmt.Println(rs)
 }
 
 func countLF(s string) int {

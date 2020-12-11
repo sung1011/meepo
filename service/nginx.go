@@ -13,6 +13,7 @@ type Nginx struct {
 	DownLoadURL      string
 	DownLoadPath     string
 	DownLoadPathTemp string
+	CrackPKG         string
 	Crack            string
 	Configure        []string
 }
@@ -22,13 +23,15 @@ func NewNginx() *Nginx {
 	ver := "1.18.0"
 	// 裂缝 meepo喜欢将他的敌人困在裂缝中 包安装的目录
 	crack := "/usr/local/crack/"
+	crackPKG := "/usr/local/crack/pkg/"
 	return &Nginx{
 		Ver:              ver,
 		DownLoadURL:      fmt.Sprintf("http://nginx.org/download/nginx-%s.tar.gz", ver),
 		DownLoadPath:     fmt.Sprintf("/tmp/nginx-%s.tar.gz", ver),
 		DownLoadPathTemp: fmt.Sprintf("/tmp/nginx-%s.tar.gz.temp", ver),
 		Crack:            crack,
-		Configure:        []string{"--prefix=/opt/ngx", "--http-log-path=/opt/access.log"},
+		CrackPKG:         crackPKG,
+		Configure:        []string{"--prefix=" + crack, "--http-log-path=/opt/access.log"},
 	}
 }
 
@@ -52,11 +55,11 @@ func (ngx *Nginx) BeginSetup() (err error) {
 
 // DoSetup _
 func (ngx *Nginx) DoSetup() (err error) {
-	err = util.UnGzip(ngx.DownLoadPath, ngx.Crack)
+	err = util.UnGzip(ngx.DownLoadPath, ngx.CrackPKG)
 	if err != nil {
 		return
 	}
-	err = os.Chdir(ngx.Crack + "nginx-" + ngx.Ver)
+	err = os.Chdir(ngx.CrackPKG + "nginx-" + ngx.Ver)
 	if err != nil {
 		return
 	}
